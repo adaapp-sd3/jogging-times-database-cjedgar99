@@ -1,0 +1,26 @@
+.users-list {
+    margin-top: 100px;
+};
+
+.card {
+    background-color: #fdfdfd;
+    padding: 10px 15px;
+    border: 1px solid #eee;
+
+    width: 60%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.button {
+    color: #545454;
+    background: #eee;
+    border: 2px solid #545454;
+    border-radius: 5px;
+}
+
+.checked {
+    background-color: #2ecc71;
+}

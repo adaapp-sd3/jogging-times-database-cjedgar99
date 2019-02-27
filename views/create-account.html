@@ -56,6 +56,7 @@
             required
           />
         </label>
+        <div class="errorMessage"></div>
 
         <button
           type="submit"
@@ -71,5 +72,12 @@
         >Sign in</a
       >
     </main>
+    <script>
+    let errorMessage = "{{{errorMessage}}}";
+    if(errorMessage !== ""){
+      document.querySelector('.errorMessage').innerHTML = `<p>${errorMessage}</p>`
+    }
+    
+    </script>
   </body>
 </html>

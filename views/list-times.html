@@ -14,6 +14,7 @@
         class="mx-auto h-16 p-4 flex items-center justify-between"
         style="width: 800px"
       >
+
         <h2>Jog Times</h2>
         <div>
           Signed in as {{ user.name }} ({{ user.email }})
@@ -22,6 +23,9 @@
             class="text-white border border-white rounded p-2 no-underline hover:bg-purple-light ml-4"
           >
             Sign Out
+          </a>
+          <a href="/delete-account" class="text-white border border-white rounded p-2 no-underline hover:bg-purple-light ml-4">
+            Delete my account
           </a>
         </div>
       </div>
@@ -85,7 +89,7 @@
           href="/times/{{ id }}"
         >
           <h3 class="text-grey-darker uppercase text-base font-normal">
-            {{ startTime }}
+            {{ date }}
           </h3>
           <p class="text-xl mt-2">
             {{ distance }}

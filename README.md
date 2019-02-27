@@ -5,7 +5,7 @@ allows joggers to track their runs. A front-end developer has already created
 the UI for the app, but right now it's populated with dummy data - fake,
 hard-coded information to make it look right.
 
-There's also code for a basic (and quiet insecure!) user login system.
+There's also code for a basic (and quite insecure!) user login system.
 
 Your task is to implement the backend and database to allow the app to meet the
 following requirements:
@@ -82,8 +82,9 @@ If you don't do this, your ids won't work properly.
     lists all jogging times
   - `views/sing-in.html` - the template for the sign-in form
 - `database.js` - sets up the database. This uses
-  [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3/blob/master/docs/api.md)
-- `database.sqlite` - the database.
+  [sql.js](https://github.com/kripken/sql.js)
+- `database.sqlite` - the database + some helper functions to make working with
+  it easier
 - `routes.js` - what to do for each route (method and URL) in the app
 - `server.js` - sets everything up and starts the app
 
@@ -99,35 +100,30 @@ touch are:
 Whenever we need to interact with the database, we need to:
 
 1. (at the top of your file) load `database.js`
-2. (at the top of your file) prepare the SQL statement we want to run
-3. Execute the SQL statement
+2. Execute your SQL statements
+3. Do something with the results
 
 Example:
 
 ```js
 // load database.js
-var db = require('../path/to/database.js')
+var { db, helpers } = require('../path/to/database.js')
 
-// prepare the SQL statement we want to run
-var selectPetsByName = db.prepare('SELECT * FROM pets WHERE name = ?')
-
-// run the sql query. in each of the below examples, each argument replaces a ?.
+// in each of the below examples, each item in an array replaces a ?.
 // this ? syntax lets us avoid SQL injections.
 
-// run the sql query, returning one row
-var row = selectPetsByName.get('rufus')
+// run a sql query, returning one row
+var row = helpers.getRow('SELECT * FROM pets WHERE id = ?', [10])
 
-// run the sql query, returning an array of all the rows
-var rows = selectPetsByName.all('rufus')
+// run a sql query, returning an array of all the rows
+var rows = helpers.getRows('SELECT * FROM pets WHERE name = ?', ['rufus'])
 
-// run the sql query, just returning nothing (apart from some info)
-var info = selectPetsByName.run('rufus')
-// when we're doing INSERTs, we can use this to find out what we INSERTed:
-var insertedId = info.lastInsertRowid
+// insert a row and get the id we inserted
+var insertedId = helpers.insert('INSERT INTO pets (name) VALUES (?)', ['rufus'])
 ```
 
 ### Final note
 
 There's a lot of code here! Some of it is using libraries you've never
 encountered before, so you may need to do some research. If you get stuck,
-remember to ask a colleague or me!
+remember to ask a colleague or coach!

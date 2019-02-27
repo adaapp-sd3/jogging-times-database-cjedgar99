@@ -1,27 +1,17 @@
-var db = require('../database')
-
-// get the queries ready - note the ? placeholders
-var insertUser = db.prepare(
-  'INSERT INTO user (name, email, password_hash) VALUES (?, ?, ?)'
-)
-
-var selectUserById = db.prepare('SELECT * FROM user WHERE id = ?')
-
-var selectUserByEmail = db.prepare('SELECT * FROM user WHERE email = ?')
-
+var { db, helpers } = require('../database')
+ 
 class User {
   static insert(name, email, passwordHash) {
     // run the insert query
-    var info = insertUser.run(name, email, passwordHash)
-
-    // check what the newly inserted row id is
-    var userId = info.lastInsertRowid
-
+    var userId = helpers.insertRow(
+      'INSERT INTO user (name, email, password_hash) VALUES (?, ?, ?)',
+      [name, email, passwordHash]
+    )
     return userId
   }
 
-  static findById(id) {
-    var row = selectUserById.get(id)
+  static findUserById(id) {
+    var row = helpers.getRow('SELECT * FROM user WHERE id = ?', [id])
 
     if (row) {
       return new User(row)
@@ -31,7 +21,7 @@ class User {
   }
 
   static findByEmail(email) {
-    var row = selectUserByEmail.get(email)
+    var row = helpers.getRow('SELECT * FROM user WHERE email = ?', [email])
 
     if (row) {
       return new User(row)
@@ -40,6 +30,10 @@ class User {
     }
   }
 
+  static deleteUser(id) {
+    helpers.runAndExpectNoRows('DELETE FROM user WHERE id = ?', [id]);
+  }
+  
   constructor(databaseRow) {
     this.id = databaseRow.id
     this.name = databaseRow.name
